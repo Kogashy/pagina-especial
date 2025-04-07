@@ -19,19 +19,33 @@
       font-size: 2em;
       margin: 20px 0;
     }
-    .galeria {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 30px;
+    .slider-container {
+      position: relative;
+      max-width: 600px;
+      margin: 30px auto;
     }
-    .galeria img {
-      max-width: 100%;
-      max-height: 250px;
+    .slider-container img {
+      width: 100%;
+      height: auto;
       border-radius: 10px;
       box-shadow: 0 0 15px rgba(255,255,255,0.2);
     }
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2.5em;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px;
+      cursor: pointer;
+      user-select: none;
+      border-radius: 50%;
+    }
+    .arrow:hover {
+      background: rgba(0, 0, 0, 0.6);
+    }
+    .left-arrow { left: 10px; }
+    .right-arrow { right: 10px; }
     audio {
       display: none;
     }
@@ -40,37 +54,17 @@
 <body>
 
   <audio id="musica" autoplay loop>
-  <source src="die-with-a-smile.mp3" type="audio/mpeg">
-  Seu navegador não suporta áudio.
-</audio>
-
-<script>
-  // Tenta forçar o autoplay após alguma interação
-  window.addEventListener('click', () => {
-    const audio = document.getElementById("musica");
-    if (audio.paused) {
-      audio.play().catch(e => {
-        console.log("Autoplay bloqueado:", e);
-      });
-    }
-  });
-
-  // Tenta tocar imediatamente ao carregar
-  window.addEventListener("DOMContentLoaded", () => {
-    const audio = document.getElementById("musica");
-    audio.play().catch(e => {
-      console.log("Autoplay bloqueado até interação do usuário.");
-    });
-  });
-</script>
+    <source src="die-with-a-smile.mp3" type="audio/mpeg">
+    Seu navegador não suporta áudio.
+  </audio>
 
   <h1>Desde 24 de Março de 2025</h1>
   <div id="contador">Carregando...</div>
 
-  <div class="galeria">
-    <img src="https://i.postimg.cc/47g8wX9r/IMG-20250327-WA0158.jpg" alt="Foto 1">
-    <img src="https://i.postimg.cc/Y4gn1vh6/IMG-20250331-WA0117.jpg" alt="Foto 2">
-    <img src="https://i.postimg.cc/87xXJRPk/IMG-20250331-WA0125.jpg" alt="Foto 3">
+  <div class="slider-container">
+    <span class="arrow left-arrow" onclick="mudarFoto(-1)">&#10094;</span>
+    <img id="foto" src="https://i.postimg.cc/47g8wX9r/IMG-20250327-WA0158.jpg" alt="Foto">
+    <span class="arrow right-arrow" onclick="mudarFoto(1)">&#10095;</span>
   </div>
 
   <script>
@@ -78,18 +72,37 @@
     function atualizarContador() {
       const agora = new Date();
       const diferenca = agora - dataInicial;
-
       const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
       const horas = Math.floor((diferenca / (1000 * 60 * 60)) % 24);
       const minutos = Math.floor((diferenca / (1000 * 60)) % 60);
       const segundos = Math.floor((diferenca / 1000) % 60);
-
       document.getElementById("contador").textContent =
         `${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos`;
     }
-
     setInterval(atualizarContador, 1000);
     atualizarContador();
+
+    const fotos = [
+      "https://i.postimg.cc/pT9gWTXX/IMG-20250327-WA0158.jpg",
+      "https://i.postimg.cc/g0tCbRpT/IMG-20250331-WA0117.jpg",
+      "https://i.postimg.cc/cJLpzhp3/IMG-20250331-WA0125.jpg"
+    ];
+    let indiceAtual = 0;
+    function mudarFoto(direcao) {
+      indiceAtual = (indiceAtual + direcao + fotos.length) % fotos.length;
+      document.getElementById("foto").src = fotos[indiceAtual];
+    }
+
+    window.addEventListener('click', () => {
+      const audio = document.getElementById("musica");
+      if (audio.paused) {
+        audio.play().catch(e => console.log("Autoplay bloqueado:", e));
+      }
+    });
+    window.addEventListener("DOMContentLoaded", () => {
+      const audio = document.getElementById("musica");
+      audio.play().catch(e => console.log("Autoplay bloqueado até interação do usuário."));
+    });
   </script>
 
 </body>
