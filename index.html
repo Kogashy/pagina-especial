@@ -39,10 +39,30 @@
 </head>
 <body>
 
-  <audio autoplay loop>
-    <source src="die-with-a-smile.mp3" type="audio/mpeg">
-    Seu navegador não suporta áudio.
-  </audio>
+  <audio id="musica" autoplay loop>
+  <source src="die-with-a-smile.mp3" type="audio/mpeg">
+  Seu navegador não suporta áudio.
+</audio>
+
+<script>
+  // Tenta forçar o autoplay após alguma interação
+  window.addEventListener('click', () => {
+    const audio = document.getElementById("musica");
+    if (audio.paused) {
+      audio.play().catch(e => {
+        console.log("Autoplay bloqueado:", e);
+      });
+    }
+  });
+
+  // Tenta tocar imediatamente ao carregar
+  window.addEventListener("DOMContentLoaded", () => {
+    const audio = document.getElementById("musica");
+    audio.play().catch(e => {
+      console.log("Autoplay bloqueado até interação do usuário.");
+    });
+  });
+</script>
 
   <h1>Desde 24 de Março de 2025</h1>
   <div id="contador">Carregando...</div>
