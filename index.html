@@ -11,25 +11,31 @@
       text-align: center;
       padding: 20px;
     }
+
     h1 {
       font-size: 2.5em;
       margin-top: 20px;
     }
+
     #contador {
       font-size: 2em;
       margin: 20px 0;
     }
+
     .slider-container {
       position: relative;
       max-width: 600px;
       margin: 30px auto;
     }
+
     .slider-container img {
-      width: 100%;
+      max-width: 100%;
       height: auto;
       border-radius: 10px;
       box-shadow: 0 0 15px rgba(255,255,255,0.2);
+      object-fit: contain;
     }
+
     .arrow {
       position: absolute;
       top: 50%;
@@ -41,22 +47,30 @@
       user-select: none;
       border-radius: 50%;
     }
+
     .arrow:hover {
       background: rgba(0, 0, 0, 0.6);
     }
+
     .left-arrow { left: 10px; }
     .right-arrow { right: 10px; }
-    audio {
-      display: none;
+
+    .legenda {
+      margin-top: 10px;
+      font-size: 1.2em;
+      color: #ccc;
+    }
+
+    iframe {
+      max-width: 600px;
+      width: 100%;
+      margin: 30px auto 0;
+      display: block;
+      border-radius: 12px;
     }
   </style>
 </head>
 <body>
-
-  <audio id="musica" autoplay loop>
-    <source src="die-with-a-smile.mp3" type="audio/mpeg">
-    Seu navegador não suporta áudio.
-  </audio>
 
   <h1>Desde 24 de Março de 2025</h1>
   <div id="contador">Carregando...</div>
@@ -65,16 +79,25 @@
     <span class="arrow left-arrow" onclick="mudarFoto(-1)">&#10094;</span>
     <img id="foto" src="https://i.postimg.cc/47g8wX9r/IMG-20250327-WA0158.jpg" alt="Foto">
     <span class="arrow right-arrow" onclick="mudarFoto(1)">&#10095;</span>
-<!-- Texto abaixo da imagem -->
-  <p>É incrível como você surgiu do nada na minha vida, e agora eu não consigo imaginar meus dias sem você. Você não é só única — você é a única para mim. O amor da minha vida.
+
+    <!-- Legenda fixa abaixo da imagem -->
+    <p class="legenda">É incrível como você surgiu do nada na minha vida, e agora eu não consigo imaginar meus dias sem você. Você não é só única — você é a única para mim. O amor da minha vida.
 
 Eu só peço uma coisa: que você nunca saia dela..
-Eu te amo meu Amor❤
-</p>
+Eu te amo meu Amor❤</p>
+  </div>
+
+  <!-- Player da playlist do YouTube Music -->
+  <div>
+    <h2>Playlist especial 🎶</h2>
+    <iframe width="100%" height="450" allow="autoplay *; encrypted-media *;" frameborder="0"
+      src="https://www.youtube.com/embed?listType=playlist&list=PLp05AVxwYausulWuO_P4i-GxrrnWZRMQ0">
+    </iframe>
   </div>
 
   <script>
     const dataInicial = new Date('2025-03-24T00:00:00');
+
     function atualizarContador() {
       const agora = new Date();
       const diferenca = agora - dataInicial;
@@ -85,30 +108,22 @@ Eu te amo meu Amor❤
       document.getElementById("contador").textContent =
         `${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos`;
     }
+
     setInterval(atualizarContador, 1000);
     atualizarContador();
 
     const fotos = [
-      "https://i.postimg.cc/pT9gWTXX/IMG-20250327-WA0158.jpg",
-      "https://i.postimg.cc/g0tCbRpT/IMG-20250331-WA0117.jpg",
-      "https://i.postimg.cc/cJLpzhp3/IMG-20250331-WA0125.jpg"
+      "https://i.postimg.cc/47g8wX9r/IMG-20250327-WA0158.jpg",
+      "https://i.postimg.cc/Y4gn1vh6/IMG-20250331-WA0117.jpg",
+      "https://i.postimg.cc/87xXJRPk/IMG-20250331-WA0125.jpg"
     ];
+
     let indiceAtual = 0;
+
     function mudarFoto(direcao) {
       indiceAtual = (indiceAtual + direcao + fotos.length) % fotos.length;
       document.getElementById("foto").src = fotos[indiceAtual];
     }
-
-    window.addEventListener('click', () => {
-      const audio = document.getElementById("musica");
-      if (audio.paused) {
-        audio.play().catch(e => console.log("Autoplay bloqueado:", e));
-      }
-    });
-    window.addEventListener("DOMContentLoaded", () => {
-      const audio = document.getElementById("musica");
-      audio.play().catch(e => console.log("Autoplay bloqueado até interação do usuário."));
-    });
   </script>
 
 </body>
